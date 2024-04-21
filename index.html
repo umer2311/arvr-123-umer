@@ -42,8 +42,14 @@
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: 'environment',
-                        width: 1280, // Specify width
-                        height: 720, // Specify height
+                        width: {
+                            min: 1280,
+                            max: 1920,
+                        },
+                        height: {
+                            min: 720,
+                            max: 1080
+                        }
                     }
                 });
                 const track = stream.getVideoTracks()[0]; // Get the first video track
