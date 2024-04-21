@@ -42,7 +42,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: {
-                            exact: 'environment'
+                            exact: 'environment' // This will select the back camera
                         },
                         width: {
                             min: 1280,
@@ -54,7 +54,7 @@
                         }
                     }
                 });
-                const track = stream.getVideoTracks()[0]; // Get the first video track
+                const track = stream.getVideoTracks(); // Get the first video track
                 const settings = track.getSettings();
                 const cameraId = settings.deviceId;
 
