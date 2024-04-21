@@ -41,7 +41,9 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        facingMode: 'environment',
+                        facingMode: {
+                            exact: 'environment'
+                        },
                         width: {
                             min: 1280,
                             max: 1920,
