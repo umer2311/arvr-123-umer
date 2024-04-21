@@ -39,25 +39,15 @@
             arCamera.removeAttribute('camera');
 
             try {
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                let backCameraId;
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                const track = stream.getVideoTracks()[0];
+                const settings = track.getSettings();
+                const cameraId = settings.deviceId;
 
-                // Find the back camera
-                for (const device of devices) {
-                    if (device.kind === 'videoinput' && device.deviceId.includes('back')) {
-                        backCameraId = device.deviceId;
-                        break;
-                    }
-                }
-
-                // If back camera found, enable it
-                if (backCameraId) {
-                    arCamera.setAttribute('camera', { active: true, sourceType: 'webcam', sourceId: backCameraId });
-                } else {
-                    console.error('Back camera not found.');
-                }
+                // Enable the back camera
+                arCamera.setAttribute('camera', { active: true, sourceType: 'webcam', sourceId: cameraId });
             } catch (error) {
-                console.error('Error accessing media devices:', error);
+                console.error('Error accessing camera:', error);
             }
 
             // Event listener to toggle video play/pause on scene click
