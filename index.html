@@ -25,16 +25,42 @@
             </a-entity>
         </a-marker>
         <a-entity camera="active: false"></a-entity> <!-- Disable the default camera -->
-        <a-entity arjs='sourceType: webcam; sourceId: back' camera></a-entity> <!-- Specify the front camera -->
+        <a-entity id="arCamera" camera></a-entity> <!-- Placeholder for AR.js camera -->
     </a-scene>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             let video = document.querySelector('#vid');
             let playButton = document.querySelector('#playButton');
             let scene = document.querySelector('a-scene');
-              console.log(scene,"scene")
+            let arCamera = document.querySelector('#arCamera');
 
+            // Disable the AR.js camera
+            arCamera.removeAttribute('camera');
+
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                let backCameraId;
+
+                // Find the back camera
+                for (const device of devices) {
+                    if (device.kind === 'videoinput' &&  device.label === 'camera2 2, facing back') {
+                        backCameraId = device.deviceId;
+                        break;
+                    }
+                }
+
+                // If back camera found, enable it
+                if (backCameraId) {
+                    arCamera.setAttribute('camera', { active: true, sourceType: 'webcam', sourceId: backCameraId });
+                } else {
+                    console.error('Back camera not found.');
+                }
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+            }
+
+            // Event listener to toggle video play/pause on scene click
             scene.addEventListener('click', function () {
                 if (video.paused) {
                     video.play();
