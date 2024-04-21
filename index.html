@@ -44,7 +44,7 @@
 
                 // Find the back camera
                 for (const device of devices) {
-                    if (device.kind === 'videoinput' &&  device.label === 'camera2 0, facing back') {
+                    if (device.kind === 'videoinput' && device.deviceId.includes('back')) {
                         backCameraId = device.deviceId;
                         break;
                     }
